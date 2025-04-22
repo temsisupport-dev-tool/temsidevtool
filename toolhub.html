@@ -2,219 +2,213 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TEMSI ToolHub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/a2e0fc118c.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/a2d9d5c56b.js" crossorigin="anonymous"></script>
   <style>
     :root {
-      --bg-color: #f4f4f4;
-      --text-color: #333;
-      --card-bg: white;
-      --header-bg: #004080;
+      --bg: #f5f5f5;
+      --text: #222;
+      --card: #fff;
+      --hover: #e0e0e0;
     }
 
-    body.dark {
-      --bg-color: #121212;
-      --text-color: #f0f0f0;
-      --card-bg: #1e1e1e;
-      --header-bg: #001f3f;
+    [data-theme="dark"] {
+      --bg: #121212;
+      --text: #f5f5f5;
+      --card: #1f1f1f;
+      --hover: #2a2a2a;
     }
 
     body {
       margin: 0;
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      transition: background 0.3s, color 0.3s;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
     }
 
-    .header {
-      background-color: var(--header-bg);
-      color: white;
-      padding: 1rem 2rem;
+    header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
+      padding: 15px 30px;
+      background-color: var(--card);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
-    .header-left {
+    .user-info {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 10px;
     }
 
     .avatar {
-      width: 40px;
-      height: 40px;
-      background: #fff;
-      color: #004080;
+      background-color: #007bff;
+      color: white;
       border-radius: 50%;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: 1rem;
     }
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .tools {
+    .tools-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      padding: 2rem;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 30px;
     }
 
     .tool-card {
-      background: var(--card-bg);
-      border-radius: 1rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      padding: 1.5rem;
+      background-color: var(--card);
+      padding: 20px;
+      border-radius: 12px;
       text-align: center;
       cursor: pointer;
+      transition: 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       position: relative;
-      transition: transform 0.2s, background 0.3s, box-shadow 0.3s;
     }
 
     .tool-card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 15px rgba(0, 102, 255, 0.5);
+      transform: translateY(-5px);
+      box-shadow: 0 0 15px #00ffff77;
     }
 
     .tool-card i {
       font-size: 2rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 10px;
     }
 
-    .tool-card h3 {
-      margin-top: 0.3rem;
-      font-size: 1.2rem;
-    }
-
-    .tool-card:hover::after {
-      content: attr(data-tooltip);
+    .tooltip {
       position: absolute;
-      bottom: 100%;
+      top: -10px;
       left: 50%;
       transform: translateX(-50%);
-      background: #004080;
+      background-color: black;
       color: white;
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      font-size: 0.9rem;
-      white-space: nowrap;
-      margin-bottom: 0.5rem;
-      z-index: 1;
-    }
-
-    .hidden {
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
       display: none;
     }
 
-    .button {
-      background-color: #fff;
-      color: #004080;
+    .tool-card:hover .tooltip {
+      display: block;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
       border: none;
-      padding: 0.5rem 1rem;
-      font-weight: bold;
-      border-radius: 0.5rem;
+      padding: 8px 14px;
+      border-radius: 6px;
       cursor: pointer;
     }
 
-    .button:hover {
-      background-color: #ddeeff;
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 1.2rem;
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <div class="header-left">
-      <div class="avatar" id="avatar">?</div>
-      <h1>TEMSI ToolHub</h1>
+  <header>
+    <div class="user-info">
+      <div class="avatar" id="userInitials"></div>
+      <div>
+        <div id="welcomeMsg">Welcome</div>
+        <div id="userRole" style="font-size: 0.85rem; opacity: 0.7;"></div>
+      </div>
     </div>
-    <div class="header-right">
-      <span id="welcomeMsg">Welcome, Guest</span>
-      <button class="button" onclick="toggleDarkMode()"><i id="themeIcon" class="fas fa-moon"></i></button>
-      <button class="button" onclick="logout()">Logout</button>
+    <div class="actions">
+      <button onclick="logout()">Logout</button>
+      <button class="toggle-btn" onclick="toggleTheme()" title="Toggle Dark Mode">
+        🌙
+      </button>
     </div>
-  </div>
+  </header>
 
-  <div class="tools">
-    <div class="tool-card" onclick="openTool('tools/sqlcodex.html')" data-tooltip="Create and test SQL queries">
+  <main class="tools-grid">
+    <div class="tool-card" onclick="go('sqlcodex.html')">
+      <div class="tooltip">Create & check SQL queries</div>
       <i class="fas fa-database"></i>
-      <h3>SQL Query Creator</h3>
+      <div>SQL Query Creator</div>
     </div>
 
-    <div class="tool-card" onclick="openTool('tools/notificationemail.html')" data-tooltip="Send deployment notifications">
-      <i class="fas fa-paper-plane"></i>
-      <h3>Deployment Notifier</h3>
-    </div>
-
-    <div class="tool-card" onclick="openTool('tools/pplauncher.html')" data-tooltip="Launch Pre-Prod environment">
-      <i class="fas fa-play-circle"></i>
-      <h3>Pre-prod TEMC+ Launcher</h3>
-    </div>
-
-    <div class="tool-card" onclick="openTool('tools/prodlauncher.html')" data-tooltip="Launch Production environment">
-      <i class="fas fa-server"></i>
-      <h3>Prod TEMC+ Launcher</h3>
-    </div>
-
-    <div class="tool-card" onclick="openTool('tools/e2elauncher.html')" data-tooltip="Launch full end-to-end environment">
-      <i class="fas fa-network-wired"></i>
-      <h3>E2E TEMC+ Launcher</h3>
-    </div>
-
-    <div class="tool-card" onclick="openTool('tools/rephraser.html')" data-tooltip="Rephrase technical or casual content">
-      <i class="fas fa-sync-alt"></i>
-      <h3>Rephraser</h3>
-    </div>
-
-    <div class="tool-card" onclick="openTool('tools/drafter.html')" data-tooltip="Generate context-based emails">
+    <div class="tool-card" onclick="go('notificationemail.html')">
+      <div class="tooltip">Send deployment notifications</div>
       <i class="fas fa-envelope-open-text"></i>
-      <h3>Email Drafter</h3>
+      <div>Deployment Notifier</div>
     </div>
 
-    <div class="tool-card hidden" id="adminTool" onclick="openTool('tools/admin.html')" data-tooltip="Only SuperAdmins can access this">
-      <i class="fas fa-user-shield"></i>
-      <h3>Add User</h3>
+    <div class="tool-card" onclick="go('pplauncher.html')">
+      <div class="tooltip">Launch Pre-prod TEMC+</div>
+      <i class="fas fa-vial"></i>
+      <div>Pre-prod Launcher</div>
     </div>
-  </div>
+
+    <div class="tool-card" onclick="go('prodlauncher.html')">
+      <div class="tooltip">Launch Prod TEMC+</div>
+      <i class="fas fa-industry"></i>
+      <div>Prod Launcher</div>
+    </div>
+
+    <div class="tool-card" onclick="go('e2elauncher.html')">
+      <div class="tooltip">E2E Testing Launcher</div>
+      <i class="fas fa-project-diagram"></i>
+      <div>E2E Launcher</div>
+    </div>
+
+    <div class="tool-card" onclick="go('rephraser.html')">
+      <div class="tooltip">Polish technical wording</div>
+      <i class="fas fa-spell-check"></i>
+      <div>Rephraser</div>
+    </div>
+
+    <div class="tool-card" onclick="go('drafter.html')">
+      <div class="tooltip">Generate clear emails</div>
+      <i class="fas fa-file-alt"></i>
+      <div>Email Drafter</div>
+    </div>
+
+    <div class="tool-card" id="adminTool" onclick="go('admin.html')" style="display: none;">
+      <div class="tooltip">Only SuperAdmins can add users</div>
+      <i class="fas fa-user-shield"></i>
+      <div>Add User</div>
+    </div>
+  </main>
 
   <script>
-    const user = localStorage.getItem('temsiUserName');
-    const role = localStorage.getItem('temsiUserRole');
+    const name = localStorage.getItem("temsiUserName");
+    const role = localStorage.getItem("temsiUserRole");
 
-    if (!user || !role) {
+    if (!name || !role) {
       window.location.href = "index.html";
     }
 
-    document.getElementById('welcomeMsg').textContent = `Welcome, ${user}`;
+    document.getElementById("welcomeMsg").innerText = `Welcome, ${name}`;
+    document.getElementById("userRole").innerText = role;
+    document.getElementById("userInitials").innerText = name.charAt(0).toUpperCase();
 
-    // Avatar initials
-    const initials = user.split(/(?=[A-Z])/).map(n => n[0]).join('').toUpperCase();
-    document.getElementById('avatar').textContent = initials;
-
-    if (role === 'SuperAdmin') {
-      document.getElementById('adminTool').classList.remove('hidden');
-    }
-
-    function openTool(page) {
-      window.location.href = page;
-    }
-
-    function toggleDarkMode() {
-      document.body.classList.toggle("dark");
-      const isDark = document.body.classList.contains("dark");
-      document.getElementById("themeIcon").className = isDark ? "fas fa-sun" : "fas fa-moon";
-      localStorage.setItem("temsiTheme", isDark ? "dark" : "light");
+    if (role.toLowerCase() === "superadmin") {
+      document.getElementById("adminTool").style.display = "block";
     }
 
     function logout() {
@@ -222,15 +216,20 @@
       window.location.href = "index.html";
     }
 
-    // Apply saved theme on load
-    window.onload = function () {
-      const savedTheme = localStorage.getItem("temsiTheme");
-      if (savedTheme === "dark") {
-        document.body.classList.add("dark");
-        document.getElementById("themeIcon").className = "fas fa-sun";
-      }
-    };
-  </script>
+    function go(page) {
+      window.location.href = page;
+    }
 
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute("data-theme");
+      const newTheme = currentTheme === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("temsi-theme", newTheme);
+    }
+
+    // Load theme from localStorage
+    const savedTheme = localStorage.getItem("temsi-theme") || "light";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+  </script>
 </body>
 </html>
