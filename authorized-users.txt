@@ -1,2 +1,2 @@
-CedricLacharmante;SupportAgent;cedric.lacharmante@tft-services.com;
-SuperUser;SuperAdmin;temsi.tools.dev@gmail.com;
+Cedric Lacharmante;Support Agent;cedric.lacharmante@tft-services.com;
+Super User;SuperAdmin;temsi.tools.dev@gmail.com;
