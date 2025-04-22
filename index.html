@@ -93,15 +93,16 @@
         let role = '';
 
         for (let line of lines) {
-          const [userName, userRole, userEmail] = line.split(';');
-          if (userEmail && userEmail.trim().toLowerCase() === email) {
-            name = userName.trim();
-            role = userRole.trim();
-            if (role === 'SupportAgent' || role === 'SuperAdmin') {
-              granted = true;
-            }
-            break;
-          }
+          const [userName, userRole, userEmail] = line.split(';').map(part => part.trim().toLowerCase());
+          if (userEmail === email) {
+              name = userName;
+              role = userRole;
+              if (role === 'supportagent' || role === 'superadmin') {
+                granted = true;
+               }
+              break;
+              }
+
         }
 
         if (granted) {
