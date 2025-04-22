@@ -5,72 +5,104 @@
   <title>TEMSI ToolHub</title>
   <style>
     body {
-      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #0e0e0e;
+      background-color: #121212;
       color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      margin: 0;
+      padding: 2rem;
     }
 
     h1 {
       color: #00ffff;
+    }
+
+    .user-info {
       margin-bottom: 2rem;
     }
 
-    .tool-list {
+    .tools {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
     }
 
-    .tool {
-      background-color: #1a1a1a;
-      border: 1px solid #333;
-      padding: 1rem 2rem;
+    .tool-card {
+      background: #1e1e1e;
+      padding: 1rem;
       border-radius: 10px;
-      text-align: center;
-      transition: 0.3s;
+      box-shadow: 0 0 10px #00ffff33;
+      transition: 0.2s;
       cursor: pointer;
-      box-shadow: 0 0 10px #00ffff44;
     }
 
-    .tool:hover {
-      background-color: #222;
-      transform: scale(1.05);
+    .tool-card:hover {
+      background: #2a2a2a;
+      transform: scale(1.02);
     }
 
-    .tool a {
-      text-decoration: none;
-      color: #00ffff;
+    .tool-title {
       font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: #00ffff;
     }
 
-    footer {
-      position: absolute;
-      bottom: 20px;
-      font-size: 0.9rem;
-      color: #666;
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <h1>🛠️ TEMSI ToolHub</h1>
-
-  <div class="tool-list">
-    <div class="tool"><a href="#">📝 Ticket Uploader</a></div>
-    <div class="tool"><a href="#">📤 Deployment Notifier</a></div>
-    <div class="tool"><a href="#">🧪 Pre-Prod Launcher</a></div>
-    <div class="tool"><a href="#">🚀 Prod Launcher</a></div>
+  <div class="user-info">
+    <h1>Welcome, <span id="user-name">User</span>!</h1>
+    <p>Your role: <span id="user-role">N/A</span></p>
   </div>
 
-  <footer>
-    © 2025 TEMSI Internal Tools – Made by You 😉
-  </footer>
+  <div class="tools">
+    <div class="tool-card">
+      <div class="tool-title">SQL Query Creator & Checker</div>
+      <p>Create and test SQL queries safely.</p>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-title">Deployment Notifier</div>
+      <p>Send updates to relevant stakeholders.</p>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-title">Pre-prod TEMC+ Launcher</div>
+      <p>Launch TEMC+ in pre-production mode.</p>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-title">Prod TEMC+ Launcher</div>
+      <p>Launch TEMC+ in production.</p>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-title">E2E TEMC+ Launcher</div>
+      <p>Launch end-to-end version of TEMC+.</p>
+    </div>
+
+    <!-- Only SuperAdmin can see this -->
+    <div class="tool-card hidden" id="add-user-card">
+      <div class="tool-title">Add User (Admin Only)</div>
+      <p>Manage access to TEMSI tools.</p>
+    </div>
+  </div>
+
+  <script>
+    const userName = localStorage.getItem('temsiUserName') || 'User';
+    const userRole = localStorage.getItem('temsiUserRole') || 'Unknown';
+
+    document.getElementById('user-name').textContent = userName;
+    document.getElementById('user-role').textContent = userRole;
+
+    if (userRole.toLowerCase() === 'superadmin') {
+      document.getElementById('add-user-card').classList.remove('hidden');
+    }
+  </script>
 
 </body>
 </html>
