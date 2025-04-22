@@ -1,63 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>TEMSI Tools Access</title>
+  <meta charset="UTF-8" />
+  <title>TEMSI Access Verification</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #101010;
-      color: #f0f0f0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0d0d0d;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      color: #00ffff;
+      margin-bottom: 1rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #1a1a1a;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ffff33;
+    }
+
+    input[type="email"] {
+      padding: 0.7rem 1rem;
+      border-radius: 5px;
+      border: none;
+      width: 300px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 0.6rem 1.2rem;
+      background-color: #00ffff;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .message {
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      display: none;
       text-align: center;
-      padding-top: 100px;
     }
 
-    #access-denied {
-      color: #ff4c4c;
-      font-size: 1.4rem;
-      display: none;
-    }
-
-    #access-granted {
+    .granted {
       color: #4caf50;
-      font-size: 1.4rem;
-      display: none;
+    }
+
+    .denied {
+      color: #ff4c4c;
     }
   </style>
 </head>
 <body>
-  <h1>🔐 TEMSI Tools Access</h1>
-  <p>Please enter your email to proceed.</p>
 
-  <div id="access-denied">Access Denied 🚫</div>
-  <div id="access-granted">Access Granted ✅</div>
+  <h1>🔐 TEMSI Tools Access</h1>
+
+  <form id="access-form">
+    <input type="email" id="email-input" placeholder="Enter your TEMSI email" required />
+    <button type="submit">Verify</button>
+  </form>
+
+  <div class="message granted" id="access-granted"></div>
+  <div class="message denied" id="access-denied">🚫 Access Denied</div>
 
   <script>
-    async function checkEmailAccess() {
-      const email = prompt("Enter your TEMSI email address:");
+    document.getElementById('access-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const email = document.getElementById('email-input').value.trim().toLowerCase();
 
       try {
-        const res = await fetch('authorized-users.txt');
-        const data = await res.text();
+        const response = await fetch('authorized-users.txt');
+        const data = await response.text();
+        const lines = data.trim().split('\n');
 
-        const isAuthorized = data
-          .split('\n')
-          .some(line => line.includes(email.trim()));
+        let granted = false;
+        let name = '';
+        let role = '';
 
-        if (isAuthorized) {
+        for (let line of lines) {
+          const [userName, userRole, userEmail] = line.split(';');
+          if (userEmail && userEmail.trim().toLowerCase() === email) {
+            name = userName.trim();
+            role = userRole.trim();
+            if (role === 'SupportAgent' || role === 'SuperAdmin') {
+              granted = true;
+            }
+            break;
+          }
+        }
+
+        if (granted) {
+          document.getElementById('access-granted').textContent = `✅ Welcome ${name} (${role})! Access Granted.`;
           document.getElementById('access-granted').style.display = 'block';
-          // You can add a redirect to ToolHub here if you want
-          window.location.href = "toolhub.html";
+          document.getElementById('access-denied').style.display = 'none';
+
+          setTimeout(() => {
+            window.location.href = "toolhub.html";
+          }, 2000);
         } else {
           document.getElementById('access-denied').style.display = 'block';
+          document.getElementById('access-granted').style.display = 'none';
         }
-      } catch (err) {
-        alert("Error loading access list.");
-        console.error(err);
+      } catch (error) {
+        alert("Error loading user list.");
+        console.error(error);
       }
-    }
-
-    checkEmailAccess();
+    });
   </script>
+
 </body>
 </html>
