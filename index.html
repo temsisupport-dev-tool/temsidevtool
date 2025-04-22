@@ -2,127 +2,81 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>TEMSI Access Verification</title>
+  <title>TEMSI Tools Login</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #0d0d0d;
-      color: #ffffff;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: white;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      margin: 0;
     }
-
-    h1 {
-      color: #00ffff;
-      margin-bottom: 1rem;
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background-color: #1a1a1a;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00ffff33;
-    }
-
-    input[type="email"] {
-      padding: 0.7rem 1rem;
-      border-radius: 5px;
-      border: none;
-      width: 300px;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-
-    button {
-      padding: 0.6rem 1.2rem;
-      background-color: #00ffff;
-      color: #000;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .message {
-      margin-top: 1rem;
-      font-size: 1.1rem;
-      display: none;
+    .login-box {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.6);
       text-align: center;
     }
-
-    .granted {
-      color: #4caf50;
+    input[type="email"] {
+      padding: 10px;
+      width: 100%;
+      border-radius: 6px;
+      border: none;
+      margin-bottom: 15px;
     }
-
-    .denied {
-      color: #ff4c4c;
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      background-color: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
-
-  <h1>🔐 TEMSI Tools Access</h1>
-
-  <form id="access-form">
-    <input type="email" id="email-input" placeholder="Enter your TEMSI email" required />
-    <button type="submit">Verify</button>
-  </form>
-
-  <div class="message granted" id="access-granted"></div>
-  <div class="message denied" id="access-denied">🚫 Access Denied</div>
+  <div class="login-box">
+    <h2>TEMSI ToolHub Login</h2>
+    <input type="email" id="emailInput" placeholder="Enter your TEMSI email" />
+    <button onclick="validateEmail()">Login</button>
+    <p id="errorMsg" style="color: red; margin-top: 10px;"></p>
+  </div>
 
   <script>
-    document.getElementById('access-form').addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const email = document.getElementById('email-input').value.trim().toLowerCase();
+    const usersRaw = `
+CedricLacharmante;SupportAgent;cedric.lacharmante@tft-services.com;
+SuperUser;SuperAdmin;temsi.tools.dev@gmail.com;
+    `.trim();
 
-      try {
-        const response = await fetch('authorized-users.txt');
-        const data = await response.text();
-        const lines = data.trim().split('\n');
+    const userLines = usersRaw.split("\n").map(line => line.trim());
 
-        let granted = false;
-        let name = '';
-        let role = '';
+    function validateEmail() {
+      const inputEmail = document.getElementById("emailInput").value.trim().toLowerCase();
+      let authorized = false;
 
-        for (let line of lines) {
-          const [userName, userRole, userEmail] = line.split(';').map(part => part.trim().toLowerCase());
-          if (userEmail === email) {
-              name = userName;
-              role = userRole;
-              if (role === 'supportagent' || role === 'superadmin') {
-                granted = true;
-               }
-              break;
-              }
-
+      for (const line of userLines) {
+        const [name, role, email] = line.split(";").map(val => val.trim().toLowerCase());
+        if (email === inputEmail) {
+          localStorage.setItem("temsiUserName", name);
+          localStorage.setItem("temsiUserRole", role);
+          authorized = true;
+          break;
         }
-
-        if (granted) {
-          document.getElementById('access-granted').textContent = `✅ Welcome ${name} (${role})! Access Granted.`;
-          document.getElementById('access-granted').style.display = 'block';
-          document.getElementById('access-denied').style.display = 'none';
-
-          setTimeout(() => {
-            window.location.href = "toolhub.html";
-          }, 2000);
-        } else {
-          document.getElementById('access-denied').style.display = 'block';
-          document.getElementById('access-granted').style.display = 'none';
-        }
-      } catch (error) {
-        alert("Error loading user list.");
-        console.error(error);
       }
-    });
-  </script>
 
+      if (authorized) {
+        window.location.href = "toolhub.html";
+      } else {
+        document.getElementById("errorMsg").textContent = "Access denied. Email not recognized.";
+      }
+    }
+  </script>
 </body>
 </html>
