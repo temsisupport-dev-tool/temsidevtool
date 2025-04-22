@@ -1,52 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TEMSI ToolHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #121212;
-      color: #ffffff;
       margin: 0;
-      padding: 2rem;
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
     }
-
-    h1 {
-      color: #00ffff;
+    .header {
+      background-color: #004080;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-
-    .user-info {
-      margin-bottom: 2rem;
+    .header h1 {
+      margin: 0;
     }
-
+    .welcome {
+      font-size: 1rem;
+    }
     .tools {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
     }
-
     .tool-card {
-      background: #1e1e1e;
-      padding: 1rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00ffff33;
-      transition: 0.2s;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.2s;
       cursor: pointer;
     }
-
     .tool-card:hover {
-      background: #2a2a2a;
       transform: scale(1.02);
+      background-color: #e6f0ff;
     }
-
-    .tool-title {
-      font-weight: bold;
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-      color: #00ffff;
+    .tool-card h3 {
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
     }
-
     .hidden {
       display: none;
     }
@@ -54,53 +56,65 @@
 </head>
 <body>
 
-  <div class="user-info">
-    <h1>Welcome, <span id="user-name">User</span>!</h1>
-    <p>Your role: <span id="user-role">N/A</span></p>
+  <div class="header">
+    <h1>TEMSI ToolHub</h1>
+    <div class="welcome" id="welcomeMsg">Welcome, Guest</div>
   </div>
 
   <div class="tools">
-    <div class="tool-card">
-      <div class="tool-title">SQL Query Creator & Checker</div>
-      <p>Create and test SQL queries safely.</p>
+    <div class="tool-card" onclick="openTool('tools/sqlcodex.html')">
+      <h3>SQL Query Creator</h3>
+      <p>Create and test SQL queries.</p>
     </div>
 
-    <div class="tool-card">
-      <div class="tool-title">Deployment Notifier</div>
-      <p>Send updates to relevant stakeholders.</p>
+    <div class="tool-card" onclick="openTool('tools/notificationemail.html')">
+      <h3>Deployment Notifier</h3>
+      <p>Send deployment notifications.</p>
     </div>
 
-    <div class="tool-card">
-      <div class="tool-title">Pre-prod TEMC+ Launcher</div>
-      <p>Launch TEMC+ in pre-production mode.</p>
+    <div class="tool-card" onclick="openTool('tools/pplauncher.html')">
+      <h3>Pre-prod TEMC+ Launcher</h3>
+      <p>Launch the pre-production environment.</p>
     </div>
 
-    <div class="tool-card">
-      <div class="tool-title">Prod TEMC+ Launcher</div>
-      <p>Launch TEMC+ in production.</p>
+    <div class="tool-card" onclick="openTool('tools/prodlauncher.html')">
+      <h3>Prod TEMC+ Launcher</h3>
+      <p>Launch the production environment.</p>
     </div>
 
-    <div class="tool-card">
-      <div class="tool-title">E2E TEMC+ Launcher</div>
-      <p>Launch end-to-end version of TEMC+.</p>
+    <div class="tool-card" onclick="openTool('tools/e2elauncher.html')">
+      <h3>E2E TEMC+ Launcher</h3>
+      <p>Launch the end-to-end environment.</p>
     </div>
 
-    <!-- Only SuperAdmin can see this -->
-    <div class="tool-card hidden" id="add-user-card">
-      <div class="tool-title">Add User (Admin Only)</div>
-      <p>Manage access to TEMSI tools.</p>
+    <div class="tool-card" onclick="openTool('tools/rephraser.html')">
+      <h3>Rephraser</h3>
+      <p>Rewrite content professionally.</p>
+    </div>
+
+    <div class="tool-card" onclick="openTool('tools/drafter.html')">
+      <h3>Email Drafter</h3>
+      <p>Generate emails from context.</p>
+    </div>
+
+    <div class="tool-card hidden" id="adminTool" onclick="openTool('tools/admin.html')">
+      <h3>Add User (SuperAdmin)</h3>
+      <p>Manage authorized users.</p>
     </div>
   </div>
 
   <script>
-    const userName = localStorage.getItem('temsiUserName') || 'User';
-    const userRole = localStorage.getItem('temsiUserRole') || 'Unknown';
+    const user = localStorage.getItem('temsiUserName') || 'Guest';
+    const role = localStorage.getItem('temsiUserRole');
 
-    document.getElementById('user-name').textContent = userName;
-    document.getElementById('user-role').textContent = userRole;
+    document.getElementById('welcomeMsg').textContent = `Welcome, ${user}`;
 
-    if (userRole.toLowerCase() === 'superadmin') {
-      document.getElementById('add-user-card').classList.remove('hidden');
+    if (role === 'SuperAdmin') {
+      document.getElementById('adminTool').classList.remove('hidden');
+    }
+
+    function openTool(page) {
+      window.location.href = page;
     }
   </script>
 
