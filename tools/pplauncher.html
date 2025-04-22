@@ -1,1 +1,186 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TemC+ Website Launcher</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f5f5f5;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    /* Grid container for cards */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+    .card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    .buttons {
+      margin-top: 10px;
+    }
+    /* Style the anchor as a button */
+    .open-btn {
+      display: inline-block;
+      text-decoration: none;
+      background-color: #007bff;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      margin-right: 10px;
+      font-size: 14px;
+    }
+    /* Style for copy link button */
+    button.copy-btn {
+      background-color: #28a745;
+      color: white;
+      padding: 8px 12px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .metrics {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #555;
+    }
+    .flag-icon {
+      width: 32px;
+      height: auto;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <h1>TemC+ Website Launcher</h1>
+  
+  <!-- Pre-Production Section -->
+  <div class="section">
+    <h2>Pre-Production Links (Incognito Mode Recommended)</h2>
+    <div id="preprodList" class="grid-container"></div>
+  </div>
+  
+  <script>
+    // Helper function to generate a flag image URL using the country code.
+    function getFlagUrl(code) {
+      return `https://flagcdn.com/32x24/${code}.png`;
+    }
+    
+    // Pre-production links with flag codes.
+    const preprodWebsites = [
+      { id: 1, title: 'New Caledonie (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/nc/', mode: 'incognito', description: 'Pre-production TemC+ app for New Caledonie.', flag: 'nc' },
+      { id: 2, title: 'Angola (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/ao/', mode: 'incognito', description: 'Pre-production TemC+ app for Angola.', flag: 'ao' },
+      { id: 3, title: 'Cambodia (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/kh/', mode: 'incognito', description: 'Pre-production TemC+ app for Cambodia.', flag: 'kh' },
+      { id: 4, title: 'Egypt (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/eg/', mode: 'incognito', description: 'Pre-production TemC+ app for Egypt.', flag: 'eg' },
+      { id: 5, title: 'Guinea Equatorial (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/gq/', mode: 'incognito', description: 'Pre-production TemC+ app for Guinea Equatorial.', flag: 'gq' },
+      { id: 6, title: 'Fiji (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/fj/', mode: 'incognito', description: 'Pre-production TemC+ app for Fiji.', flag: 'fj' },
+      { id: 7, title: 'French Polynesia (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/pf/', mode: 'incognito', description: 'Pre-production TemC+ app for French Polynesia.', flag: 'pf' },
+      { id: 8, title: 'Jordan (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/jo/', mode: 'incognito', description: 'Pre-production TemC+ app for Jordan.', flag: 'jo' },
+      { id: 9, title: 'Mali (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/ma/', mode: 'incognito', description: 'Pre-production TemC+ app for Mali.', flag: 'ml' },
+      { id: 10, title: 'Kenya (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/ke/', mode: 'incognito', description: 'Pre-production TemC+ app for Kenya.', flag: 'ke' },
+      { id: 11, title: 'Madagascar (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/mg/', mode: 'incognito', description: 'Pre-production TemC+ app for Madagascar.', flag: 'mg' },
+      { id: 12, title: 'Mauritius (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/mu/', mode: 'incognito', description: 'Pre-production TemC+ app for Mauritius.', flag: 'mu' },
+      { id: 13, title: 'Malawi (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/mw/', mode: 'incognito', description: 'Pre-production TemC+ app for Malawi.', flag: 'mw' },
+      { id: 14, title: 'PNG (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/pg/', mode: 'incognito', description: 'Pre-production TemC+ app for PNG.', flag: 'pg' },
+      { id: 15, title: 'Senegal (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/sn/', mode: 'incognito', description: 'Pre-production TemC+ app for Senegal.', flag: 'sn' },
+      { id: 16, title: 'Tanzania (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/tz/', mode: 'incognito', description: 'Pre-production TemC+ app for Tanzania.', flag: 'tz' },
+      { id: 17, title: 'Togo (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/tg/', mode: 'incognito', description: 'Pre-production TemC+ app for Togo.', flag: 'tg' },
+      { id: 18, title: 'Uganda (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/ug/', mode: 'incognito', description: 'Pre-production TemC+ app for Uganda.', flag: 'ug' },
+      { id: 19, title: 'Zambia (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/zm/', mode: 'incognito', description: 'Pre-production TemC+ app for Zambia.', flag: 'zm' },
+      { id: 20, title: 'Ivory Coast (Pre-Production)', url: 'https://bomobilitybusinesspp.totalenergies.com/ci/', mode: 'incognito', description: 'Pre-production TemC+ app for Ivory Coast.', flag: 'ci' }
+    ];
+    
+    // Load metrics from localStorage for a given id.
+    function loadStats(id) {
+      const stats = localStorage.getItem('websiteStats_' + id);
+      return stats ? JSON.parse(stats) : { count: 0, lastOpened: 'Never' };
+    }
+    
+    // Update and save metrics for a given id.
+    function updateStats(id) {
+      const stats = loadStats(id);
+      stats.count++;
+      stats.lastOpened = new Date().toLocaleString();
+      localStorage.setItem('websiteStats_' + id, JSON.stringify(stats));
+      return stats;
+    }
+    
+    // Copy text to clipboard.
+    async function copyToClipboard(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        alert('Link copied to clipboard: ' + text);
+      } catch (err) {
+        prompt('Copy the link:', text);
+      }
+    }
+    
+    // Handle left-click on an open link: update metrics and show instructions for incognito links.
+    function handleLinkClick(event, site) {
+      if (event.button === 0) {
+        const updatedStats = updateStats(site.id);
+        document.getElementById('metrics-' + site.id).innerText =
+          'Times Opened: ' + updatedStats.count + ' | Last Opened: ' + updatedStats.lastOpened;
+    
+        if (site.mode === 'incognito') {
+          event.preventDefault();
+          alert('This link is intended for incognito mode.\n\nRight-click the link and choose "Open link in incognito window", or copy the link and open it manually.');
+        }
+      }
+    }
+    
+    // Render website cards into the specified container.
+    function renderCards(sites, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      sites.forEach(site => {
+        const stats = loadStats(site.id);
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h3>
+            <img src="${getFlagUrl(site.flag)}" alt="Flag" class="flag-icon">
+            ${site.title}
+          </h3>
+          <p>${site.description}</p>
+          <div class="buttons">
+            <a 
+              href="${site.url}" 
+              target="_blank" 
+              class="open-btn"
+              id="open-${site.id}"
+            >Open Link</a>
+            <button class="copy-btn" onclick='copyToClipboard("${site.url}")'>Copy Link</button>
+          </div>
+          <div class="metrics" id="metrics-${site.id}">
+            Times Opened: ${stats.count} | Last Opened: ${stats.lastOpened}
+          </div>
+        `;
+        container.appendChild(card);
+    
+        const openLinkAnchor = document.getElementById('open-' + site.id);
+        openLinkAnchor.addEventListener('mousedown', function(event) {
+          handleLinkClick(event, site);
+        });
+      });
+    }
+    
+    // Render both sections.
+    renderCards(preprodWebsites, 'preprodList');
+  </script>
+</body>
+</html>
