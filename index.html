@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TEMSI Tools Access</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #101010;
+      color: #f0f0f0;
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    #access-denied {
+      color: #ff4c4c;
+      font-size: 1.4rem;
+      display: none;
+    }
+
+    #access-granted {
+      color: #4caf50;
+      font-size: 1.4rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔐 TEMSI Tools Access</h1>
+  <p>Please enter your email to proceed.</p>
+
+  <div id="access-denied">Access Denied 🚫</div>
+  <div id="access-granted">Access Granted ✅</div>
+
+  <script>
+    async function checkEmailAccess() {
+      const email = prompt("Enter your TEMSI email address:");
+
+      try {
+        const res = await fetch('authorized-users.txt');
+        const data = await res.text();
+
+        const isAuthorized = data
+          .split('\n')
+          .some(line => line.includes(email.trim()));
+
+        if (isAuthorized) {
+          document.getElementById('access-granted').style.display = 'block';
+          // You can add a redirect to ToolHub here if you want
+          // window.location.href = "toolhub.html";
+        } else {
+          document.getElementById('access-denied').style.display = 'block';
+        }
+      } catch (err) {
+        alert("Error loading access list.");
+        console.error(err);
+      }
+    }
+
+    checkEmailAccess();
+  </script>
+</body>
+</html>
